@@ -1,0 +1,531 @@
+
+<!doctype html>
+<html class="landing" lang="en" manifest="cache.manifest">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<title>SCORPION HOST PS4 FIRMWARE 14.02</title>
+
+<style>
+
+/* ORIGINAL PAGE STRUCTURE */
+html, body {
+ margin: 0;
+ padding: 0;
+ width: 100vw;
+ height: 100vh;
+ max-height: 100vh;
+ overflow: hidden;
+ background: #000;
+ color: #c8ced8;
+ font: 15px/1.45 "Segoe UI", system-ui, sans-serif;
+ position: relative;
+}
+
+/* MATRIX BACKGROUND */
+#matrix {
+ position: fixed;
+ inset: 0;
+ width: 100%;
+ height: 100%;
+ z-index: 0;
+ pointer-events: none;
+ display: block;
+}
+
+/* SCANLINES */
+body::after {
+ content: "";
+ position: fixed;
+ inset: 0;
+ pointer-events: none;
+ z-index: 5;
+ background: repeating-linear-gradient(
+  0deg,
+  rgba(0,0,0,0.08) 0px,
+  rgba(0,0,0,0.08) 1px,
+  transparent 1px,
+  transparent 3px
+ );
+}
+
+/* SCORPION HOST HEADER */
+#brand {
+ position: relative;
+ z-index: 2;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-direction: column;
+ gap: 10px;
+ padding: 12px 15px;
+ background: linear-gradient(
+  180deg,
+  rgba(0,0,0,0.85) 0%,
+  rgba(0,0,0,0.25) 100%
+ );
+ border-bottom: 1px solid rgba(0,229,255,0.35);
+}
+
+/* LOGO */
+#brand img {
+ width: 90px;
+ height: 90px;
+ object-fit: cover;
+ border-radius: 50%;
+ border: 2px solid #00e5ff;
+ box-shadow:
+  0 0 15px #00e5ff,
+  0 0 30px #00e5ff,
+  inset 0 0 15px #00e5ff;
+}
+
+/* TITLE */
+#brand b {
+ font-size: clamp(20px, 4vw, 34px);
+ font-weight: 900;
+ letter-spacing: .12em;
+ color: #00e5ff;
+ background: none;
+ -webkit-text-fill-color: #00e5ff;
+ text-transform: uppercase;
+ text-align: center;
+ text-shadow:
+  0 0 8px #00e5ff,
+  0 0 18px #00e5ff,
+  0 0 36px rgba(0,229,255,0.55);
+}
+
+/* ASCII ART */
+.ascii-art {
+ position: relative;
+ z-index: 2;
+ color: #00ff41;
+ text-shadow: 0 0 8px #00ff41;
+ font: bold 10px/1.1 Consolas, monospace;
+ text-align: center;
+ white-space: pre;
+ margin: 8px auto;
+ overflow: hidden;
+}
+
+/* ORIGINAL FIXED CONTACT BOX */
+.contact-box {
+ position: fixed;
+ bottom: 30px;
+ left: 0;
+ right: 0;
+ text-align: center;
+ z-index: 10;
+}
+
+.contact-number {
+ font-size: 18px;
+ font-weight: 800;
+ color: #00e5ff;
+ letter-spacing: 0.5px;
+ background: rgba(0,0,0,0.85);
+ display: inline-block;
+ padding: 8px 16px;
+ border: 1px solid #00e5ff;
+ border-radius: 20px;
+ box-shadow: 0 0 10px rgba(0,229,255,0.35);
+}
+
+body.log .contact-box {
+ display: none;
+}
+
+/* ORIGINAL CONTENT POSITIONING */
+.shell {
+ position: relative;
+ z-index: 2;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ height: calc(100vh - 180px);
+ max-height: calc(100vh - 180px);
+ box-sizing: border-box;
+ padding-bottom: 40px;
+ overflow: hidden;
+}
+
+.panel {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+
+.pick {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ gap: 20px;
+}
+
+/* ORIGINAL START BUTTON */
+.count {
+ width: 220px;
+ height: 220px;
+ border-radius: 50%;
+ border: 3px dashed #3bd8ff;
+ background: rgba(0,0,0,0.45);
+ color: #ffffff;
+ cursor: pointer;
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ box-shadow:
+  inset 0 0 15px rgba(0,191,255,0.1),
+  0 0 10px #00bfff;
+ z-index: 2;
+ outline: none;
+}
+
+.count:hover {
+ box-shadow:
+  inset 0 0 20px rgba(0,216,255,0.2),
+  0 0 14px #00d8ff;
+ border-color: #00d8ff;
+}
+
+.count:disabled {
+ border-color: rgba(30,39,50,0.5);
+ box-shadow: none;
+ cursor: default;
+}
+
+/* ORIGINAL BUTTON */
+.btn {
+ background: transparent;
+ border: none;
+ color: #00e5ff;
+ font-size: 35px;
+ font-weight: bold;
+ text-transform: uppercase;
+ cursor: pointer;
+ width: 100%;
+ height: 100%;
+ border-radius: 50%;
+ text-shadow: 0 0 12px #00e5ff;
+}
+
+/* ORIGINAL TEXT */
+.lede {
+ margin: 15px 0 5px 0;
+ font-size: 16px;
+ color: #00e5ff;
+ text-shadow: 0 0 8px #00e5ff;
+ text-align: center;
+}
+
+.opt {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ font-size: 20px;
+ color: #00e5ff;
+ text-align: center;
+ text-shadow: 0 0 8px #00e5ff;
+}
+
+/* WHATSAPP QR CODE */
+.wa-qr {
+ position: fixed;
+ bottom: 12px;
+ left: 15px;
+ z-index: 10;
+ text-align: center;
+ width: 145px;
+}
+
+.wa-qr p {
+ font-size: 11px;
+ color: #00e5ff;
+ margin: 0 0 6px;
+ font-weight: bold;
+ letter-spacing: 1px;
+ text-transform: uppercase;
+ text-shadow: 0 0 8px #00e5ff;
+}
+
+.wa-qr img {
+ display: block;
+ width: 105px;
+ height: 105px;
+ margin: auto;
+ padding: 6px;
+ background: #fff;
+ border-radius: 7px;
+ border: 2px solid #00e5ff;
+ box-shadow: 0 0 12px rgba(0,240,255,0.4);
+}
+
+.wa-qr a {
+ display: inline-block;
+ margin-top: 5px;
+ color: #25D366;
+ font-size: 12px;
+ font-weight: bold;
+ text-decoration: none;
+ text-shadow: 0 0 8px #25D366;
+}
+
+/* MOBILE LAYOUT */
+@media (max-width: 600px) {
+ #brand img {
+  width: 65px;
+  height: 65px;
+ }
+
+ #brand {
+  padding: 8px;
+ }
+
+ .count {
+  width: 190px;
+  height: 190px;
+ }
+
+ .wa-qr {
+  width: 100px;
+  left: 5px;
+  bottom: 5px;
+ }
+
+ .wa-qr img {
+  width: 65px;
+  height: 65px;
+ }
+
+ .wa-qr p {
+  font-size: 9px;
+ }
+
+ .wa-qr a {
+  font-size: 10px;
+ }
+
+ .contact-box {
+  bottom: 10px;
+  left: 105px;
+  right: 5px;
+ }
+
+ .contact-number {
+  font-size: 11px;
+  padding: 6px 8px;
+ }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- MATRIX BACKGROUND -->
+<canvas id="matrix"></canvas>
+
+<!-- SCORPION HOST HEADER -->
+<div id="brand">
+ <img src="logo_scorp.png" alt="Scorpion Host Logo">
+ <b>SCORPION HOST PS4 FIRMWARE 14.02</b>
+</div>
+
+<!-- SCORPION ASCII ART -->
+<pre class="ascii-art" aria-hidden="true">
+ __/ \__ __/ \__
+ / / / \ / \ \ \
+ / / /___/ \___\ \ \
+ /__/ / \ \__\
+ / / ___________ \ \
+ /_/ / / \_\
+ / ______/
+ / /______
+ /___________/
+ / /
+ _____/ /
+ / /
+ / ______/
+ / /
+ / /
+ / /
+ //
+ /
+</pre>
+
+<!-- ORIGINAL MAIN CONTENT -->
+<div class="shell">
+ <main class="panel">
+  <form class="pick" id="pick">
+
+   <div class="count" id="count">
+    <button class="btn" id="start-btn" type="submit">start</button>
+   </div>
+
+   <p class="lede" id="status-lede">
+    PS4 kernel exploit &middot; firmware 12.00 and 14.02
+   </p>
+
+   <label class="opt">
+    <span id="instruction-text">
+     Press Enter (START) to Load GoldHEN
+    </span>
+   </label>
+
+  </form>
+ </main>
+</div>
+<!-- WHATSAPP QR -->
+<div class="wa-qr">
+ <p>Scan to Chat WhatsApp</p>
+
+ <a href="https://wa.me/201093424331"
+    target="_blank"
+    rel="noopener noreferrer">
+
+  <img
+   src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://wa.me/201093424331"
+   alt="WhatsApp QR Code">
+
+  Chat with Scorpion Host
+ </a>
+</div>
+
+<!-- ORIGINAL LAUNCH SCRIPT - UNCHANGED -->
+<script src="launch.js"></script>
+
+<!-- ORIGINAL CACHE PROCESS LISTENER - UNCHANGED -->
+<script>
+
+// Cache Process Listener
+if (window.applicationCache) {
+    var appCache = window.applicationCache;
+    var statusLede = document.getElementById('status-lede');
+    var startBtn = document.getElementById('start-btn');
+    var insText = document.getElementById('instruction-text');
+
+    appCache.addEventListener('checking', function() {
+        statusLede.innerHTML = "PS4 kernel exploit &middot; firmware 12.00 and 14.02";
+    }, false);
+
+    appCache.addEventListener('downloading', function() {
+        statusLede.innerHTML = "Downloading offline cache...";
+        startBtn.disabled = true;
+        startBtn.innerHTML = "WAIT";
+        insText.innerHTML = "Caching files, please do not close browser.";
+    }, false);
+
+    appCache.addEventListener('progress', function(e) {
+        if (e.lengthComputable) {
+            var percent = Math.round((e.loaded / e.total) * 100);
+            statusLede.innerHTML = "Caching files: " + percent + "%";
+        }
+    }, false);
+
+    appCache.addEventListener('cached', function() {
+        statusLede.innerHTML = "Cache Installed successfully!";
+        startBtn.disabled = false;
+        startBtn.innerHTML = "START";
+        insText.innerHTML = "Turn off internet and restart browser to test.";
+    }, false);
+
+    appCache.addEventListener('updateready', function() {
+        if (appCache.status == appCache.UPDATEREADY) {
+            appCache.swapCache();
+            statusLede.innerHTML = "Cache updated! Reloading...";
+            setTimeout(function() { window.location.reload(); }, 2000);
+        }
+    }, false);
+
+    appCache.addEventListener('noupdate', function() {
+        statusLede.innerHTML = "PS4 kernel exploit &middot; firmware 12.00 and 14.02";
+    }, false);
+
+    appCache.addEventListener('error', function() {
+        // Only show error if the user is online and it actually fails
+        if (navigator.onLine) {
+            statusLede.innerHTML = "Error caching files. Retrying...";
+        }
+    }, false);
+}
+
+</script>
+
+<!-- MATRIX ANIMATION -->
+<script>
+
+(function() {
+
+ var canvas = document.getElementById("matrix");
+ var ctx = canvas.getContext("2d");
+
+ var cols = 0;
+ var drops = [];
+
+ var CHARS =
+ "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+ function resizeMatrix() {
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  cols = Math.floor(canvas.width / 16);
+
+  drops = [];
+
+  for (var i = 0; i < cols; i++) {
+   drops[i] = Math.random() * -50;
+  }
+
+ }
+
+ function drawMatrix() {
+
+  ctx.fillStyle = "rgba(0,0,0,0.08)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  for (var i = 0; i < cols; i++) {
+
+   var ch = CHARS[
+    Math.floor(Math.random() * CHARS.length)
+   ];
+
+   var y = drops[i] * 16;
+
+   if (Math.random() < 0.04) {
+    ctx.fillStyle = "#ff1a1a";
+   }
+   else if (Math.random() < 0.08) {
+    ctx.fillStyle = "#ffffff";
+   }
+   else {
+    ctx.fillStyle =
+     Math.random() < 0.15 ? "#00ff41" : "#007722";
+   }
+
+   ctx.font = "14px Consolas, monospace";
+   ctx.fillText(ch, i * 16, y);
+
+   if (y > canvas.height && Math.random() > 0.975) {
+    drops[i] = 0;
+   }
+
+   drops[i] += 0.5;
+  }
+ }
+
+ resizeMatrix();
+
+ window.addEventListener("resize", resizeMatrix);
+
+ setInterval(drawMatrix, 40);
+
+})();
+
+</script>
+
+</body>
+</html>
