@@ -394,7 +394,77 @@ body.log .contact-box {
 </div>
 
 <!-- ORIGINAL LAUNCH SCRIPT - UNCHANGED -->
-<script src="launch.js"></script>
+<script>
+(function () {
+  var PASS_HASH = 2138144283;
+
+  function loadExploit() {
+    var s = document.createElement("script");
+    s.src = "launch.js";
+    document.body.appendChild(s);
+  }
+
+  if (localStorage.getItem("scorp_auth") === String(PASS_HASH)) {
+    loadExploit();
+    return;
+  }
+
+  function hashCode(s) {
+    var h = 0;
+    for (var i = 0; i < s.length; i++) {
+      h = ((h << 5) - h) + s.charCodeAt(i);
+      h |= 0;
+    }
+    return h;
+  }
+
+  var style = document.createElement("style");
+  style.textContent =
+    "#directGate{position:fixed;top:0;right:0;bottom:0;left:0;z-index:999999;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center}" +
+    "#directBox{position:relative;z-index:2;background:rgba(5,10,16,.9);border:2px solid #00e5ff;border-radius:10px;padding:28px 34px;box-shadow:0 0 25px rgba(0,229,255,.5);max-width:340px;width:85%}" +
+    "#directBox img{width:90px;height:90px;border-radius:50%;border:2px solid #00e5ff;box-shadow:0 0 15px #00e5ff;margin-bottom:12px}" +
+    "#directBox h2{color:#00e5ff;font:900 20px/1.2 'Segoe UI',sans-serif;letter-spacing:.1em;margin:0 0 8px;text-shadow:0 0 10px #00e5ff}" +
+    "#directBox p{color:#00e5ff;font:12px Consolas,monospace;margin:0 0 16px}" +
+    "#directIn{width:90%;padding:10px;background:rgba(0,0,0,.85);border:1px solid #00e5ff;color:#00e5ff;font:15px Consolas,monospace;text-align:center;outline:none;margin-bottom:14px}" +
+    "#directBtn{padding:9px 24px;background:transparent;border:1px solid #00e5ff;color:#00e5ff;font:700 12px 'Segoe UI',sans-serif;letter-spacing:.12em;cursor:pointer}" +
+    "#directErr{display:block;margin-top:10px;color:#ff6666;font:12px Consolas,monospace;min-height:14px}";
+  document.head.appendChild(style);
+
+  var ov = document.createElement("div");
+  ov.id = "directGate";
+  ov.innerHTML =
+    '<div id="directBox">' +
+      '<img src="logo_scorp.png" alt="Logo" />' +
+      '<h2>RESTRICTED ACCESS</h2>' +
+      '<p>&gt;&gt; ENTER ACCESS CODE</p>' +
+      '<input id="directIn" type="password" placeholder="••••••••" autocomplete="off" />' +
+      '<button id="directBtn" type="button">CONFIRM</button>' +
+      '<span id="directErr"></span>' +
+    '</div>';
+  document.body.insertBefore(ov, document.body.firstChild);
+
+  var inp = document.getElementById("directIn");
+  var btn = document.getElementById("directBtn");
+  var err = document.getElementById("directErr");
+
+  function check() {
+    if (hashCode(inp.value) !== PASS_HASH) {
+      err.textContent = "INVALID CODE";
+      inp.value = "";
+      return;
+    }
+    localStorage.setItem("scorp_auth", String(PASS_HASH));
+    ov.parentNode.removeChild(ov);
+    loadExploit();
+  }
+
+  btn.addEventListener("click", check);
+  inp.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.keyCode === 13) check();
+  });
+  inp.focus();
+})();
+</script>
 
 <!-- ORIGINAL CACHE PROCESS LISTENER - UNCHANGED -->
 <script>
